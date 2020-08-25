@@ -16,6 +16,11 @@ public class FinalAssignment {
      */
     public static void main(String[] args) {
         // TODO code application logic here
+        Login page;
+        page = new Login();
+
+//        Mainpage page;
+//        page = new Mainpage();
     }
     
 }
