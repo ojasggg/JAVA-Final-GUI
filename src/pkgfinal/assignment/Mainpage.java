@@ -26,19 +26,23 @@ public class Mainpage extends JFrame implements ActionListener {
         setSize(400,350);
         setTitle("Result Management System");
         
+//       Label to disply messege 
+
         lblwelcome = new JLabel("Welcome Back!!");
         lblwelcome.setFont(new Font("Arial",Font.BOLD,25));
-        add(lblwelcome);
         lblwelcome.setBounds(90,50,200,40);
+        add(lblwelcome);
         
+//       Btns for add and view of student data 
+
         btnadd = new JButton("ADD");
-        add(btnadd);
         btnadd.setBounds(70,120,100,40);
+        add(btnadd);
         btnadd.addActionListener(this);
                 
         btnview = new JButton("View");
-        add(btnview);
         btnview.setBounds(200,120,100,40);
+        add(btnview);
         btnview.addActionListener(this);
         
         setDefaultCloseOperation(EXIT_ON_CLOSE);

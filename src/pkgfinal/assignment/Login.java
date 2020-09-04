@@ -77,7 +77,14 @@ public class Login extends JFrame implements ActionListener {
             String password = new String(pass.getPassword());
             
             if(e.getSource().equals(btnlogin)){
-                if((username.equals("sapana"))&&(password.equals("admin")) ){
+                if (username.isEmpty()){
+                    JOptionPane.showMessageDialog(null,"Username Required");
+                }
+                else if(password.isEmpty()){
+                    JOptionPane.showMessageDialog(null,"Password Required");
+             
+                }
+                else if((username.equals("sapana"))&&(password.equals("admin")) ){
                     JOptionPane.showMessageDialog(null,"Login Sucessfully");
                     dispose();
                     Mainpage page =new Mainpage();
