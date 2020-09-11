@@ -18,6 +18,8 @@ import javax.swing.JLabel;
  */
 public class Mainpage extends JFrame implements ActionListener {
     
+    
+    
     JLabel lblwelcome;
     JButton btnadd, btnview;
     

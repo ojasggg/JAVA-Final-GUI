@@ -8,9 +8,12 @@ package pkgfinal.assignment;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.ResultSetMetaData;
 import java.sql.SQLException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.swing.JOptionPane;
 
 /**
  *
@@ -60,7 +63,7 @@ public class Database {
     public int submit(Integer sid,String subject1,String subject2,String subject3,String subject4){
         int s = 0;
         try{
-            pstmt  = conn.prepareStatement("insert into subject values(?,?,?,?,?)");
+            pstmt  = conn.prepareStatement("insert into subject values(?,?)");
             pstmt.setInt(1,sid);
             pstmt.setString(2,subject1);
             pstmt.setString(3,subject2);
@@ -74,3 +77,30 @@ public class Database {
         return s;
     }
 }
+    
+//    public int send(Integer sid){
+//        int x = 0;
+//        try{
+//           pstmt  = conn.prepareStatement("select Student_Id from subject"); 
+//           ResultSet rs = pstmt.executeQuery();
+//
+//           while (rs.next()){
+//                x = rs.getInt("Student_Id");
+////               System.out.print(x);
+//                if (x==sid){
+//                    return
+//                }
+//                else{
+//                    return x;
+//                }
+//           }
+//           rs.close();
+//           
+//            
+//        }catch (SQLException e){
+//            System.out.println("Error :"+ e);
+//        }
+//        return x;
+//    }
+//
+//}

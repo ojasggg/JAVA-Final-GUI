@@ -18,15 +18,15 @@ public class FinalAssignment {
         // TODO code application logic here
 //        Login page;
 //        page = new Login();
-//
-//        Mainpage page;
-//        page = new Mainpage();
+
+        Main page;
+        page = new Main();
 
 //        AddStudent page;
 //        page = new AddStudent();
 
-        Subject page;
-        page = new Subject();
+//        Id page;
+//        page = new Id();
 
 //        Database page;
 //        page = new Database();
