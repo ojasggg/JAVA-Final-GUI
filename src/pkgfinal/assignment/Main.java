@@ -5,9 +5,12 @@
  */
 package pkgfinal.assignment;
 
+import java.awt.Container;
+import java.awt.FlowLayout;
 import java.awt.Font;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
+import java.awt.event.*;
+import java.sql.*;
+import java.util.ArrayList;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JFrame;
@@ -16,26 +19,40 @@ import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
 import javax.swing.JOptionPane;
+import javax.swing.JPanel;
+import javax.swing.JScrollPane;
+import javax.swing.JTable;
 import javax.swing.JTextField;
+import javax.swing.table.DefaultTableModel;
 /**
  *
  * @author Ojash
  */
 public class Main extends JFrame implements ActionListener {
    
-    JLabel lblmsg,lblmsg1,lblname,lbladdress,lblclass,lblsection;
+    JLabel lblmsg,lblmsg1,lblmsg2,lblname,lbladdress,lblclass,lblsection;
     JTextField txtname,txtaddress;
     JComboBox jbclass,jbsection;
-    JButton btnreg,btnupd,btndel;
+    JButton btnreg,btnupd,btndel,btnview;
     JMenuBar mb;
     JMenu m,s,m2 ;
     JMenuItem i1, i2, i3, i4, i5;
+    JScrollPane scroll;
+    DefaultTableModel model = new DefaultTableModel();
+    JPanel jp1;
+    Container cnt = this.getContentPane();
+    JTable jtbl ;
+    
     
     public Main(){
         
         setLayout(null);
         setSize(1300,900);
         setTitle("Result Management System");
+        setLocationRelativeTo(null);
+    
+        
+//      MenuBar and Menu Items
         
         mb = new JMenuBar();
         
@@ -60,6 +77,8 @@ public class Main extends JFrame implements ActionListener {
         mb.add(s);
         mb.add(m2);
         
+//      Labels for the messages 
+
         lblmsg = new JLabel("Student Registration Form");
         lblmsg.setFont(new Font("Arial",Font.BOLD,30));
         lblmsg.setBounds(450,20,400,50);
@@ -69,6 +88,11 @@ public class Main extends JFrame implements ActionListener {
         lblmsg1.setFont(new Font("Arial",Font.BOLD,20));
         lblmsg1.setBounds(70,90,300,20);
         add(lblmsg1);
+        
+        lblmsg2 = new JLabel("Student Detail");
+        lblmsg2.setFont(new Font("Arial",Font.BOLD,20));
+        lblmsg2.setBounds(770,90,300,20);
+        add(lblmsg2);
         
         
 //        Labels 
@@ -134,23 +158,66 @@ public class Main extends JFrame implements ActionListener {
         add(btnreg);
         btnreg.addActionListener(this);
         
+//        Button for update
+
         btnupd = new JButton("UPDATE");
         btnupd.setBounds(150, 310, 100, 30);
         add(btnupd);
         btnupd.addActionListener(this);
-        
+
+//        Button for delete   
+
         btndel = new JButton("DELETE");
         btndel.setBounds(260, 310, 100, 30);
         add(btndel);
         btndel.addActionListener(this);
         
+//        Button for view
+
+//        btnview = new JButton("REFRESH");
+//        btnview.setBounds(150, 370, 100, 30);
+//        add(btnview);
+//        btnview.addActionListener(this);
+//        
+        
+        
+////        Table 
+        
+        jtbl = new JTable(model);
+        cnt.setLayout(null);
+        jtbl.setRowHeight(jtbl.getRowHeight()+20);
+        add(jtbl);
+        
+        model.addColumn("Id");
+        model.addColumn("Name");
+        model.addColumn("Address");
+        model.addColumn("Class");
+        model.addColumn("Section");
+        
+
+        
+        try {
+            Class.forName("com.mysql.jdbc.Driver");
+            Connection conn = DriverManager.getConnection("jdbc:mysql://localhost/exam_registration", "root", "");
+            PreparedStatement pstmt = conn.prepareStatement("SELECT * FROM student");
+            ResultSet rs = pstmt.executeQuery();
+            while(rs.next()){
+                model.addRow(new Object[]{rs.getInt(1), rs.getString(2),rs.getString(3),rs.getString(4),rs.getString(5)});
+            }
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+        }
+        JScrollPane pg = new JScrollPane(jtbl);
+        pg.setBounds(500,150,700,600);
+        cnt.add(pg);
         
         setJMenuBar(mb);
         setDefaultCloseOperation(EXIT_ON_CLOSE);
         setVisible(true);
-     
+
         
     }
+    
 
     @Override
     public void actionPerformed(ActionEvent e) {
@@ -172,10 +239,9 @@ public class Main extends JFrame implements ActionListener {
                     int id=db.register(name,address,classes,section);
                     if(id>0){
                         JOptionPane.showMessageDialog(null,"Saved");
-
-                        txtname.setText("");
-                        txtaddress.setText("");
-                        txtname.requestFocus();
+                        Main page = new Main();
+                        dispose();
+                        
 
                     }else{
                         JOptionPane.showMessageDialog(null,"Unable to Save");
@@ -187,7 +253,27 @@ public class Main extends JFrame implements ActionListener {
                 }
             }
         }
+        
+     
     }
+    
+    @Override
+    public void mouseClicked(MouseEvent e) {
+        DefaultTableModel model = (DefaultTableModel)jtbl.getModel();
+        int selectedRowIndex = jtbl.getSelectedRow();
+        
+        txtname.setText(model.getValueAt(selectedRowIndex, 0).toString());
+        txtaddress.setText(model.getValueAt(selectedRowIndex, 1).toString());
+        
+        String combo = model.getValueAt(selectedRowIndex,3).toString();
+        for(int i=0;i<jbclass.getItemCount();i++){
+            if(jbclass.getItemAt(i).toString().equalsIgnoreCase(combo)){
+                jbclass.setSelectedIndex(i);
+            }
+        }
+    
+    }
+    
 }
             
             

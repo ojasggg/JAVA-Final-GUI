@@ -14,6 +14,9 @@ import java.sql.SQLException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.JOptionPane;
+//import net.proteanit.sql.DbUtils;
+
+import javax.swing.table.DefaultTableModel;
 
 /**
  *
@@ -23,6 +26,7 @@ public class Database {
     
     public Connection conn;
     PreparedStatement pstmt;
+    ResultSet rs= null;
     
     
     public Database(){
@@ -77,6 +81,51 @@ public class Database {
         return s;
     }
 }
+    
+//    private void DisplayTable(){
+//        try{
+//           pstmt  = conn.prepareStatement("select * from student"); 
+//           rs = pstmt.executeQuery();
+//           t1.setModel(DbUtils.resultSetToTableModel(rs));
+//           
+//        }catch (Exception e){
+//            JOptionPane.showMessageDialog(null,"Error:"+e);
+//        }
+//    }
+//}
+   
+//   public void view(){
+//       
+//       DefaultTableModel table = new DefaultTableModel();
+//       
+//       table.addColumn("ID");
+//       table.addColumn("Name");
+//       table.addColumn("Address");
+//       table.addColumn("Class");
+//       table.addColumn("Section");
+//       
+//       try{
+//           pstmt= conn.prepareStatement("select * from student");
+//           rs = pstmt.executeQuery();
+//           
+//           while(rs.next()){
+//               table.addRow(new Object[]{
+//                       rs.getInt(1),
+//                       rs.getString(2),
+//                       rs.getString(3),
+//                       rs.getString(4),
+//                       rs.getString(5)
+//               });
+//           }
+//           
+//       }catch (Exception e){
+//           JOptionPane.showMessageDialog(null,"Error:"+e);
+//       }
+//       
+//       Main.setModel(table);
+//       
+//   } 
+//}
     
 //    public int send(Integer sid){
 //        int x = 0;
