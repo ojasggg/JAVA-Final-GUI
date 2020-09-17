@@ -26,6 +26,24 @@ public class Login extends JFrame implements ActionListener {
     
     
     public Login(){
+        
+        try {
+            for (UIManager.LookAndFeelInfo info : UIManager.getInstalledLookAndFeels()) {
+                if ("Nimbus".equals(info.getName())) {
+                    UIManager.setLookAndFeel(info.getClassName());
+                    break;
+                }
+            }
+        } catch (UnsupportedLookAndFeelException e) {
+            // handle exception
+        } catch (ClassNotFoundException e) {
+            // handle exception
+        } catch (InstantiationException e) {
+            // handle exception
+        } catch (IllegalAccessException e) {
+            // handle exception
+        }
+        
         setLayout(null);
         setSize(400,350);
         setTitle("Result Management System");
@@ -84,10 +102,10 @@ public class Login extends JFrame implements ActionListener {
                     JOptionPane.showMessageDialog(null,"Password Required");
              
                 }
-                else if((username.equals("sapana"))&&(password.equals("admin")) ){
+                else if((username.equals("c"))&&(password.equals("admin")) ){
                     JOptionPane.showMessageDialog(null,"Login Sucessfully");
                     dispose();
-                    Mainpage page =new Mainpage();
+                    Main page =new Main();
                 }
                 else{
                     JOptionPane.showMessageDialog(null,"Login Failed");

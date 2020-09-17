@@ -5,24 +5,12 @@
  */
 package pkgfinal.assignment;
 
-import java.awt.Container;
-import java.awt.FlowLayout;
-import java.awt.Font;
+import java.awt.*;
 import java.awt.event.*;
 import java.sql.*;
 import java.util.ArrayList;
-import javax.swing.JButton;
-import javax.swing.JComboBox;
-import javax.swing.JFrame;
-import javax.swing.JLabel;
-import javax.swing.JMenu;
-import javax.swing.JMenuBar;
-import javax.swing.JMenuItem;
-import javax.swing.JOptionPane;
-import javax.swing.JPanel;
-import javax.swing.JScrollPane;
-import javax.swing.JTable;
-import javax.swing.JTextField;
+import javax.swing.*;
+import javax.swing.UnsupportedLookAndFeelException;
 import javax.swing.table.DefaultTableModel;
 /**
  *
@@ -45,6 +33,23 @@ public class Main extends JFrame implements ActionListener {
     
     
     public Main(){
+        
+        try {
+            for (UIManager.LookAndFeelInfo info : UIManager.getInstalledLookAndFeels()) {
+                if ("Nimbus".equals(info.getName())) {
+                    UIManager.setLookAndFeel(info.getClassName());
+                    break;
+                }
+            }
+        } catch (UnsupportedLookAndFeelException e) {
+            // handle exception
+        } catch (ClassNotFoundException e) {
+            // handle exception
+        } catch (InstantiationException e) {
+            // handle exception
+        } catch (IllegalAccessException e) {
+            // handle exception
+        }
         
         setLayout(null);
         setSize(1300,900);
@@ -171,14 +176,7 @@ public class Main extends JFrame implements ActionListener {
         btndel.setBounds(260, 310, 100, 30);
         add(btndel);
         btndel.addActionListener(this);
-        
-//        Button for view
-
-//        btnview = new JButton("REFRESH");
-//        btnview.setBounds(150, 370, 100, 30);
-//        add(btnview);
-//        btnview.addActionListener(this);
-//        
+       
         
         
 ////        Table 
@@ -193,6 +191,36 @@ public class Main extends JFrame implements ActionListener {
         model.addColumn("Address");
         model.addColumn("Class");
         model.addColumn("Section");
+        
+        jtbl.addMouseListener(new java.awt.event.MouseAdapter() {
+        @Override
+        public void mouseClicked(java.awt.event.MouseEvent evt) {
+
+            DefaultTableModel model = (DefaultTableModel)jtbl.getModel();
+            int selectedRowIndex  = jtbl.getSelectedRow();
+            
+
+            txtname.setText(model.getValueAt(selectedRowIndex, 1).toString());
+            txtaddress.setText(model.getValueAt(selectedRowIndex, 2).toString());
+            
+            
+            String combo1 = model.getValueAt(selectedRowIndex,3).toString();
+            for(int i=0;i<jbclass.getItemCount();i++){
+                if(jbclass.getItemAt(i).toString().equalsIgnoreCase(combo1)){
+                    jbclass.setSelectedIndex(i);
+                }    
+                    
+            }
+                    
+            String combo2 = model.getValueAt(selectedRowIndex,3).toString();
+            for(int j=0;j<jbsection.getItemCount();j++){
+                if(jbsection.getItemAt(j).toString().equalsIgnoreCase(combo2)){
+                    jbsection.setSelectedIndex(j);
+                
+                }
+            }
+        }    
+        });
         
 
         
@@ -254,25 +282,84 @@ public class Main extends JFrame implements ActionListener {
             }
         }
         
+        if (e.getSource().equals(btnupd)){
+            String name= txtname.getText();
+            String address= txtaddress.getText();
+            String classes = jbclass.getSelectedItem().toString();
+            String section = jbsection.getSelectedItem().toString();
+            
+            
+            if ((address.equals("")) || (name.equals(""))){
+                JOptionPane.showMessageDialog(null,"Fillout the form correctly");
+            }
+            else{
+                try{
+                    Database db = new Database();
+                    int selectedRowIndex  = jtbl.getSelectedRow();
+            
+                    int a = (int) model.getValueAt(selectedRowIndex,0);
+
+                    int id=db.update(name,address,classes,section,a);
+                    if(id>0){
+                        JOptionPane.showMessageDialog(null,"Updated");
+                        Main page = new Main();
+                        dispose();
+                        
+
+                    }else{
+                        JOptionPane.showMessageDialog(null,"Unable to Update");
+
+                    }
+                }
+                catch(Exception x){
+                System.out.println("error found" + x);
+                JOptionPane.showMessageDialog(null,"Image is necessary.");
+                }
+            }
+            
+        }
+            
+        if (e.getSource().equals(btndel)){
+            try{
+                Database db = new Database();
+                int selectedRowIndex  = jtbl.getSelectedRow();
+            
+                int a = (int) model.getValueAt(selectedRowIndex,0);
+
+                int id=db.delete(a);
+                if(id>0){
+                    JOptionPane.showMessageDialog(null,"Deleted");
+                    Main page = new Main();
+                    dispose();
+                        
+
+                }else{
+                    JOptionPane.showMessageDialog(null,"Unable to delete");
+
+                }
+            }
+            catch(Exception x){
+                System.out.println("error found" + x);
+                JOptionPane.showMessageDialog(null,"Image is necessary.");
+            } 
+        }
+        if (e.getSource().equals(i1)){
+            dispose();
+            Main page = new Main();
+        }
+        if (e.getSource().equals(i2)){
+            dispose();
+            Subject page = new Subject();
+        }
+        if (e.getSource().equals(i3)){
+            dispose();
+            Marks page = new Marks();
+        }
+        
      
     }
     
-    @Override
-    public void mouseClicked(MouseEvent e) {
-        DefaultTableModel model = (DefaultTableModel)jtbl.getModel();
-        int selectedRowIndex = jtbl.getSelectedRow();
-        
-        txtname.setText(model.getValueAt(selectedRowIndex, 0).toString());
-        txtaddress.setText(model.getValueAt(selectedRowIndex, 1).toString());
-        
-        String combo = model.getValueAt(selectedRowIndex,3).toString();
-        for(int i=0;i<jbclass.getItemCount();i++){
-            if(jbclass.getItemAt(i).toString().equalsIgnoreCase(combo)){
-                jbclass.setSelectedIndex(i);
-            }
-        }
-    
-    }
+   
     
 }
             
